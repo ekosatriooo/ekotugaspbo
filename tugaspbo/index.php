@@ -435,3 +435,150 @@ echo $class->prefixName("Siti Aisyah");
 
 <h2 style="color: blue;" align=""left"">Pertemuan-7 </h1>
 <h3 style="color: black;" align=""left"">Penjelasan Koding Crud </h1>
+<h2>index.php</h2>
+    <P>
+        Kode ini merupakan halaman utama untuk aplikasi manajemen inventaris toko buah "TOKO BUAH EKO". Aplikasi ini dirancang dengan antarmuka sederhana yang memungkinkan pengguna melakukan berbagai operasi CRUD pada data barang</P>
+    
+        <div>
+    <h3>Fitur Utama:</h3>
+    <ol>
+        <li>
+            <strong>Create (Tambah Barang):</strong>
+            <ul>
+                <li>Tombol "Tambah Barang" akan menampilkan form untuk menambahkan barang baru.</li>
+                <li>Proses ini dilakukan melalui file <code>add_data.php</code>.</li>
+                <li>Pengguna dapat memasukkan detail barang yang akan disimpan dalam sistem.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Read (Lihat Stok):</strong>
+            <ul>
+                <li>Tombol "Lihat Stok" menampilkan daftar barang yang tersedia.</li>
+                <li>Informasi stok ditampilkan melalui file <code>view.php</code>.</li>
+                <li>Memungkinkan pengguna melihat semua barang yang ada di inventaris.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Update (Edit Barang):</strong>
+            <ul>
+                <li>Menggunakan iframe untuk menampilkan form edit.</li>
+                <li>Proses edit dilakukan secara dinamis.</li>
+                <li>Memungkinkan pengguna mengubah informasi barang yang sudah ada.</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Delete (Hapus Barang):</strong>
+            <ul>
+                <li>Bagian "Proses Data" yang di-include dari <code>proses_data.php</code>.</li>
+                <li>Memungkinkan pengguna menghapus barang dari inventaris.</li>
+            </ul>
+        </li>
+    </ol>
+</div>
+
+<h3>Fitur Tambahan dalam Kode</h3>
+    <ul id="fitur">
+        <li>Desain responsif dengan CSS</li>
+        <li>Tombol untuk menampilkan/menyembunyikan section</li>
+        <li>Catatan penting tentang refresh halaman untuk melihat perubahan</li>
+    </ul>
+
+<h3>Fungsi JavaScript:</h3>
+<div class="container">
+        <p>Fungsi-fungsi ini memungkinkan navigasi antarhalaman tanpa me-reload seluruh halaman.</p>
+    <h2>Penjelasan Operasi CREATE pada add_data.php</h2>
+    <h2>1. Koneksi Database</h2>
+    <p>
+        Untuk membuat koneksi ke database MySQL, gunakan kode berikut:
+    </p>
+<img src="code1.png" alt="" width="60%">
+<h3>Penjelasan Koneksi Database</h3>
+    <ul>
+        <li>Membuat koneksi ke database MySQL</li>
+        <li>Host: <b>localhost</b></li>
+        <li>Username: <b>root</b></li>
+        <li>Password: <b>kosong</b></li>
+        <li>Nama Database: <b>db.eko</b></li>
+    </ul>
+    <h3>2. Proses Penambahan Data</h3>
+<img src="code2.png" alt="" width="60%">
+<h3>Fitur utama:</h3>
+<ul>
+        <li>Menerima data dari form</li>
+        <li>Melakukan insert data ke tabel tbl_ekostock</li>
+        <li>Menampilkan pesan sukses/error</li>
+    </ul>
+
+    <h3>3. Desain Antarmuka Form</h3>
+<h3>Fitur form:</h3>
+<ul>
+        <li>Input untuk ID Barang</li>
+        <li>Input untuk Nama Barang</li>
+        <li>Input untuk Stok</li>
+        <li>Input untuk Harga Beli</li>
+        <li>Input untuk Harga jual</li>
+    </ul>
+
+    <h3>4. Fitur JavaScript Tambahan</h3>
+    <img src="code3.png" alt="" width="60%">
+    <h3>Keunggulan:</h3>
+    <ul>
+        <li>Menambah data tanpa reload halaman (AJAX)</li>
+        <li>Mereset form setelah submit</li>
+        <li>Menampilkan pesan sukses</li>
+
+    </ul>
+
+    <h2>Penjelasan Operasi UPDATE dalam File Edit Data</h2>
+    <h3>1. Proses Pengambilan Data Barang</h3>
+    <img src="code4.png" alt="" width="60%">
+    <h3>Fitur utana:</h3>
+    <ul>
+        <li>Mengambil ID barang dari parameter URL</li>
+        <li>Menggunakan prepared statement untuk keamanan</li>
+        <li>Mengambil data barang berdasarkan ID</li>
+        <li>Mencegah SQL Injection</li>
+    </ul>
+
+    <h3>2. Form Edit Data</h3>
+    <h3>Fitur utana:</h3>
+    <ul>
+        <li>Input tersembunyi untuk ID Barang</li>
+        <li>Menginput Nama Barang</li>
+        <li>Input Stok</li>
+        <li>Input Harga Beli</li>
+        <li>Input Harga Jual</li>
+        <li>Tombol Update</li>
+    </ul>
+
+    <h3>3. Proses Update</h3>
+    <img src="code5.png" alt="" width="60%">
+    <ul>
+        <li>Form diarahkan ke proses_data.php</li>
+        <li>Mengirim data dengan metode POST</li>
+        <li>Menyertakan ID Barang tersembunyi</li>
+    </ul>
+
+    <h2>3. Fitur JavaScript</h2>
+    <h3>Fitur hapus barang</h3>
+<img src="code6.png" alt="" width="60%">
+<h3>Keunggulan</h3>
+    <ul>
+        <li>Konfirmasi sebelum menghapus</li>
+        <li>Pengiriman data secara asynchronous</li>
+        <li>Penghapusan baris tanpa reload halaman</li>
+    </ul>
+    <h2>Fungsi Edit Barang</h2>
+    <img src="code7.png" alt="" width="60%">
+    <ul>
+        <li>Membuka form edit di iframe</li>
+        <li>Menampilkan section edit</li>
+    </ul>
+
+    <h2>4. Penanganan Kondisi Kosong</h2>
+<h3>Fitur Utama:</h3>
+    <ul>
+        <li>Menampilkan pesan jika tidak ada data</li>
+    </ul>
+</body>
+</html>

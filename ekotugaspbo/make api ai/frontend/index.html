@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Informatika AI — Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+</head>
+<body class="light">
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">
+          <button id="sidebarToggle" class="icon-btn" aria-label="Toggle sidebar">
+            ☰
+          </button>
+          <h1 class="title">Informatika AI</h1>
+        </div>
+        <div class="sidebar-actions">
+          <button id="newChatBtn" class="btn full">Chat Baru</button>
+        </div>
+      </div>
+
+      <div class="history-section">
+        <h2 class="section-title">Riwayat Percakapan</h2>
+        <ul id="historyList" class="history-list" aria-live="polite"></ul>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button id="aboutBtn" class="btn ghost">Tentang AI</button>
+        <button id="toggleThemeBtn" class="btn ghost">Mode Gelap</button>
+        <button id="homeBtn" class="btn ghost">Kembali ke halaman utama</button>
+      </div>
+    </aside>
+
+    <!-- Overlay for mobile when sidebar open -->
+    <div id="sidebarOverlay" class="overlay hidden"></div>
+
+    <!-- Main content -->
+    <main class="main">
+      <header class="main-header">
+        <div class="header-left">
+          <button id="sidebarOpenBtn" class="icon-btn mobile-only" aria-label="Open sidebar">☰</button>
+          <div class="page-title" id="pageTitle">Welcome</div>
+        </div>
+      </header>
+
+      <section class="content">
+        <!-- Welcome / Chat container / About container are swapped via JS -->
+        <div id="welcomeView" class="welcome view">
+          <div class="welcome-card">
+            <div class="logo">🤖</div>
+            <h2>Selamat datang di Informatika AI</h2>
+            <p class="muted">Coba salah satu contoh prompt di bawah atau mulai chat baru.</p>
+
+            <div class="prompt-grid" id="examplePrompts">
+              <!-- Two-column cards -->
+              <div class="prompt-card">Buat ringkasan 150 kata tentang AI dan etika.</div>
+              <div class="prompt-card">Buat rencana pelajaran Informatika untuk SMA 45 menit.</div>
+              <div class="prompt-card">Buat kode JavaScript sederhana untuk todo list.</div>
+              <div class="prompt-card">Jelaskan konsep OOP dengan analogi sehari-hari.</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="chatView" class="chat view hidden" aria-live="polite">
+          <div id="chatContainer" class="chat-container">
+            <!-- Messages injected here -->
+          </div>
+        </div>
+
+        <div id="aboutView" class="about view hidden">
+          <div class="about-card">
+            <h2>Tentang Informatika AI</h2>
+            <p>
+              Ini adalah demo aplikasi chat AI bernama <strong>Informatika AI</strong>.
+              Semua respons di sini adalah dummy (simulasi) — tidak terhubung ke backend.
+            </p>
+            <ul>
+              <li>Sidebar bisa toggle & responsive</li>
+              <li>Riwayat disimpan di <code>localStorage</code></li>
+              <li>Mode gelap & terang tersedia</li>
+            </ul>
+            <p class="muted">Catatan: Untuk integrasi backend (OpenAI dll.) perlu API key & server.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Input area -->
+      <footer class="composer" id="composer">
+        <div class="composer-inner">
+          <textarea id="promptInput" placeholder="Tulis pesan... (tekan Enter untuk kirim, Shift+Enter untuk baris baru)"></textarea>
+          <div class="composer-actions">
+            <button id="sendBtn" class="btn primary">Kirim</button>
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <template id="history-item-template">
+    <li class="history-item">
+      <button class="history-open"></button>
+      <div class="history-meta">
+        <small class="history-time"></small>
+        <div class="history-controls">
+          <button class="btn tiny rename">Rename</button>
+          <button class="btn tiny delete">Hapus</button>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <template id="message-template">
+    <div class="message">
+      <div class="bubble user"></div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

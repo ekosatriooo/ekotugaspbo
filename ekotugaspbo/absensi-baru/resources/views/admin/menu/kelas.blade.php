@@ -30,9 +30,9 @@
                     <form action="{{ route('kelas.store') }}" method="POST" class="row g-3">
                         @csrf
                         <div class="col-md-2">
-                            <label class="small fw-bold text-muted">TINGKAT</label>
+                            <label class="small fw-bold text-muted">KELAS</label>
                             <select name="kelas" class="form-select border-0 bg-light @error('kelas') is-invalid @enderror" required>
-                                <option value="" selected disabled>Pilih...</option>
+                                <option value="" selected disabled>Pilih</option>
                                 <option value="X">X</option>
                                 <option value="XI">XI</option>
                                 <option value="XII">XII</option>
@@ -42,11 +42,11 @@
                             <label class="small fw-bold text-muted">NAMA KELAS</label>
                             <input type="text" name="nama_kelas" 
                                 class="form-control border-0 bg-light @error('nama_kelas') is-invalid @enderror" 
-                                placeholder="Contoh: RPL 1" value="{{ old('nama_kelas') }}" required>
+                                placeholder="nama kelas" value="{{ old('nama_kelas') }}" required>
                         </div>
                         <div class="col-md-5">
                             <label class="small fw-bold text-muted">JURUSAN</label>
-                            <input type="text" name="jurusan" class="form-control border-0 bg-light" placeholder="Contoh: Rekayasa Perangkat Lunak" required>
+                            <input type="text" name="jurusan" class="form-control border-0 bg-light" placeholder="jurusan" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm">
@@ -163,14 +163,15 @@
 
     // Notifikasi SweetAlert
     @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Mantap!',
-            text: "{{ session('success') }}",
-            showConfirmButton: false,
-            timer: 2000,
-            background: '#ffffff',
-            iconColor: '#0d6efd'
+        Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
+    @endif
+
+    @if($errors->has('nama_kelas'))
+        Swal.fire({ 
+            icon: 'error', 
+            title: 'Oops...', 
+            text: "{{ $errors->first('nama_kelas') }}",
+            confirmButtonColor: '#d33',
         });
     @endif
 

@@ -41,11 +41,12 @@ Route::middleware(['auth'])->group(function () {
     // ============================================================
     // ROUTE YANG BISA DIAKSES ADMIN & PETUGAS (Pake role:admin,petugas)
     // ============================================================
-    Route::middleware(['role:admin,petugas'])->group(function () {
+    Route::middleware(['role:admin,petugas,guru'])->group(function () {
         
         // Dashboard masing-masing (tetap dipisah foldernya)
         Route::get('/admin/dashboard', [UserController::class, 'adminDashboard'])->name('admin.dashboard');
         Route::get('/petugas/dashboard', [UserController::class, 'petugasDashboard'])->name('petugas.dashboard');
+        Route::get('/guru/dashboard', [UserController::class, 'guruDashboard'])->name('guru.dashboard');
 
         // Manajemen Siswa
         Route::get('/admin/siswa', [SiswaController::class, 'index'])->name('siswa.index');
@@ -102,11 +103,6 @@ Route::middleware(['auth'])->group(function () {
         // API Config
         Route::get('/admin/api-config', [AbsensiController::class, 'apiConfig'])->name('admin.api.index');
         Route::post('/admin/api-config/update', [AbsensiController::class, 'apiUpdate'])->name('admin.api.update');
-    });
-
-    // --- GRUP GURU ---
-    Route::middleware(['role:guru'])->group(function () {
-        Route::get('/guru/dashboard', function () { return view('guru.dashboard'); })->name('guru.dashboard');
     });
 
 

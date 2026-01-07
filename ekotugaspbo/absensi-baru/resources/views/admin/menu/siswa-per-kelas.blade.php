@@ -130,52 +130,98 @@
 {{-- MODAL-MODAL --}}
 @foreach($siswa_per_kelas as $s)
     {{-- MODAL EDIT --}}
-    <div class="modal fade" id="editSiswa{{ $s->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow" style="border-radius: 20px;">
-                <div class="modal-header border-0 px-4 pt-4">
-                    <h5 class="fw-bold"><i class="bi bi-pencil-square me-2"></i>Edit Data Siswa</h5>
-                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
-                </div>
-                <form action="{{ route('siswa.update', $s->id) }}" method="POST">
-                    @csrf @method('PUT')
-                    <div class="modal-body px-4">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="small fw-bold mb-1">NIS</label>
-                                <input type="text" name="nis" class="form-control bg-light border-0 py-2" value="{{ $s->nis }}" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="small fw-bold mb-1">Jenis Kelamin</label>
-                                <select name="jenis_kelamin" class="form-select bg-light border-0 py-2" required>
-                                    <option value="L" {{ $s->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
-                                    <option value="P" {{ $s->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="small fw-bold mb-1">Nama Lengkap</label>
-                                <input type="text" name="nama" class="form-control bg-light border-0 py-2 text-uppercase" value="{{ $s->nama }}" required>
-                            </div>
-                            <div class="col-12">
-                                <label class="small fw-bold mb-1">Kelas</label>
-                                <select name="kelas" class="form-select bg-light border-0 py-2" required>
-                                    @foreach($kelas as $k_item)
-                                        <option value="{{ $k_item->id }}" {{ $s->kelas == $k_item->id ? 'selected' : '' }}>
-                                            {{ $k_item->kelas }} {{ $k_item->nama_kelas }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 px-4 pb-4">
-                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary rounded-pill px-4 fw-bold shadow-sm">Simpan</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    {{-- Modal Edit --}}
+                                <div class="modal fade" id="editSiswa{{ $s->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                                            <div class="modal-header border-0 p-4 pb-0">
+                                                <h5 class="fw-bold mb-0 text-dark">Update Data Siswa</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{{ route('siswa.update', $s->id) }}" method="POST">
+                                                @csrf @method('PUT')
+                                                <div class="modal-body p-4">
+                                                    <div class="row g-3">
+                                                        <div class="col-md-4">
+                                                            <label class="small fw-bold mb-1">NIS</label>
+                                                            <input type="text" name="nis" class="form-control rounded-3 @if($errors->edit->has('nis')) is-invalid @endif" value="{{ $s->nis }}">
+                                                            @if ($errors->edit->has('nis'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('nis') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <label class="small fw-bold mb-1">Nama Lengkap</label>
+                                                            <input type="text" name="nama" class="form-control rounded-3 @if($errors->edit->has('nama')) is-invalid @endif" value="{{ $s->nama }}">
+                                                            @if ($errors->edit->has('nama'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('nama') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="small fw-bold mb-1">Jenis Kelamin</label>
+                                                            <select name="jenis_kelamin" class="form-control rounded-3 @error('jenis_kelamin') is-invalid @enderror">
+                                                                <option value="L" {{ $s->jenis_kelamin == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                                                <option value="P" {{ $s->jenis_kelamin == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                                            </select>
+                                                            @if ($errors->edit->has('jenis_kelamin'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('jenis_kelamin') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="small fw-bold mb-1">Kelas</label>
+                                                            <select name="kelas" class="form-control rounded-3 @error('kelas') is-invalid @enderror">
+                                                                @foreach(\App\Models\Kelas::all() as $k)
+                                                                    <option value="{{ $k->id }}" {{ $s->kelas == $k->id ? 'selected' : '' }}>{{ $k->kelas }} {{ $k->nama_kelas }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @if ($errors->edit->has('kelas'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('kelas') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="small fw-bold mb-1">Tanggal Lahir</label>
+                                                            <input type="date" name="tanggal_lahir" class="form-control rounded-3 @error('tanggal_lahir') is-invalid @enderror" value="{{ $s->tanggal_lahir }}">
+                                                            @if ($errors->edit->has('tanggal_lahir'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('tanggal_lahir') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="small fw-bold mb-1">No. HP (WhatsApp)</label>
+                                                            <input type="text" name="no_hp" class="form-control rounded-3 @error('no_hp') is-invalid @enderror" value="{{ $s->no_hp }}">
+                                                            @if ($errors->edit->has('no_hp'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('no_hp') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="small fw-bold mb-1">Alamat</label>
+                                                            <input type="text" name="alamat" class="form-control rounded-3 @error('alamat') is-invalid @enderror" value="{{ $s->alamat }}">
+                                                            @if ($errors->edit->has('alamat'))
+                                                                <div class="invalid-feedback d-block">
+                                                                    {{ $errors->edit->first('alamat') }}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-0 p-4 pt-0">
+                                                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary rounded-pill px-4 shadow-sm fw-bold">Simpan Perubahan</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
 @endforeach
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -200,6 +246,17 @@
             if (result.isConfirmed) { document.getElementById('delete-form-' + id).submit(); }
         });
     }
+
+    @if(session('success'))
+        Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", timer: 2000, showConfirmButton: false });
+    @endif
+</script>
+
+<style>
+    .form-control:focus, .form-select:focus { box-shadow: none !important; border-color: #0d6efd !important; }
+    .table thead th { font-weight: 700; font-size: 11px; letter-spacing: 1px; border-top: none; }
+    .btn-light:hover { background-color: #e9ecef; }
+</style>
 </script>
 
 <style>

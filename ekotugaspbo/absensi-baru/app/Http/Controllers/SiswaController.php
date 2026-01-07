@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use App\Models\Siswa;
 use App\Models\User;
 use App\Models\Absensi;
@@ -34,10 +35,10 @@ class SiswaController extends Controller
             // Pesan error bahasa Indonesia (biar user paham)
             'nis.required' => 'NIS wajib diisi!',
             'nis.unique' => 'NIS ini sudah terdaftar, gunakan NIS lain!',
-            'nama.required' => 'Nama siswa jangan dikosongkan!',
-            'tanggal_lahir.required' => 'Tanggal lahir harus diisi untuk keperluan data!',
+            'nama.required' => 'Nama siswa tidak boleh dikosongkan!',
+            'tanggal_lahir.required' => 'Tanggal lahir harus diisi!',
             'kelas.required' => 'Silahkan pilih kelas terlebih dahulu!',
-            'jenis_kelamin.required' => 'Silahkan masukkan jenis kelamin!',
+            'jenis_kelamin.required' => 'Silahkan pilih jenis kelamin!',
             'no_hp.numeric' => 'Silahkan masukkan nomor hp',
             'alamat.string' => 'Silahkan masukkan alamat!',
         ]);
@@ -50,41 +51,48 @@ class SiswaController extends Controller
 
     public function update(Request $request, $id)
 {
-    // 1. Pastikan ID ada
     $siswa = Siswa::findOrFail($id);
 
-    // 2. Validasi
-    $request->validate([
-        // 'unique:nama_tabel,nama_kolom,ID_yang_dikecualikan'
-        'nis' => 'required|unique:siswa,nis,' . $id,
-        'nama' => 'required|string|max:255',
-        'kelas' => 'required',
-        'jenis_kelamin' => 'required|in:L,P',
-        'tanggal_lahir' => 'required|date', 
+    $validator = Validator::make($request->all(), [
+        'nis'            => 'required|unique:siswa,nis,' . $siswa->id,
+        'nama'           => 'required|string|max:255',
+        'kelas'          => 'required',
+        'jenis_kelamin'  => 'required',
+        'tanggal_lahir'  => 'required|date',
+        'no_hp'          => 'nullable|numeric',
+        'alamat'         => 'nullable|string|max:500',
     ], [
-        'nis.unique' => 'Gagal Update! NIS ini sudah dipakai siswa lain.',
-        'nis.required' => 'NIS tidak boleh kosong!',
-        'tanggal_lahir.required' => 'Tanggal lahir tidak boleh kosong!',
+        'nis.required'           => 'NIS wajib diisi!',
+        'nis.unique'             => 'NIS ini sudah terdaftar!',
+        'nama.required'          => 'Nama siswa tidak boleh kosong!',
+        'kelas.required'         => 'Kelas wajib dipilih!',
+        'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih!',
+        'tanggal_lahir.required' => 'Tanggal lahir wajib diisi!',
+        'no_hp.numeric'          => 'Nomor HP harus berupa angka!',
     ]);
 
-    // 3. Update Data
+    // ⛔ JIKA VALIDASI GAGAL (INI KUNCINYA)
+    if ($validator->fails()) {
+        return back()
+            ->withErrors($validator, 'edit')
+            ->with('edit_id', $siswa->id)
+            ->withInput();
+    }
+
+    // ✅ UPDATE DATA (1x SAJA)
     $siswa->update([
         'nis'           => $request->nis,
         'nama'          => $request->nama,
         'jenis_kelamin' => $request->jenis_kelamin,
+        'kelas'         => $request->kelas,
+        'tanggal_lahir' => $request->tanggal_lahir,
         'no_hp'         => $request->no_hp,
         'alamat'        => $request->alamat,
-        'tanggal_lahir' => $request->tanggal_lahir,
-        'kelas'         => $request->kelas,
     ]);
 
-    $data = $request->all();
-
-    // Jalankan update
-    $siswa->update($data);
-
-    return redirect()->back()->with('success', 'Data siswa berhasil diupdate!');
+    return back()->with('success', 'Data siswa berhasil diupdate!');
 }
+
 
     public function destroy($id)
     {
@@ -175,9 +183,18 @@ class SiswaController extends Controller
         }
 
         // Statistik tetap hitung dari tabel Absensi (Hadir, Izin/Sakit yang disetujui, Alpa)
-        $hadir = Absensi::where('siswa_id', $siswa->id)->where('status', 'Hadir')->count();
-        $izin  = Absensi::where('siswa_id', $siswa->id)->whereIn('status', ['Izin', 'Sakit'])->count();
-        $alpa  = Absensi::where('siswa_id', $siswa->id)->where('status', 'Alpa')->count();
+       // Gunakan whereIn agar menghitung baik yang statusnya 'Hadir' maupun 'Terlambat'
+        $hadir = Absensi::where('siswa_id', $siswa->id)
+                        ->whereIn('status', ['Hadir', 'Terlambat'])
+                        ->count();
+
+        $izin  = Absensi::where('siswa_id', $siswa->id)
+                        ->whereIn('status', ['Izin', 'Sakit'])
+                        ->count();
+
+        $alpa  = Absensi::where('siswa_id', $siswa->id)
+                        ->where('status', 'Alpa')
+                        ->count();
 
         return view('siswa.dashboard', compact('user', 'siswa', 'absen', 'hadir', 'izin', 'alpa'));
     }

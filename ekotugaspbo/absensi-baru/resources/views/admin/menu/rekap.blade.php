@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-3 border-start border-danger border-4" style="border-radius: 15px;">
-                        <small class="text-muted fw-bold d-block mb-1 text-uppercase">Total Alpa ({{ Carbon\Carbon::create()->month($bulan)->translatedFormat('F') }})</small>
+                        <small ...>Total Alpa ({{ Carbon\Carbon::create()->month((int)$bulan)->translatedFormat('F') }})</small>
                         <div class="d-flex align-items-center">
                             <h3 class="fw-bold mb-0 text-danger me-2">{{ $rekap->sum('alpa') }}</h3>
                             <span class="text-muted small">Kali</span>

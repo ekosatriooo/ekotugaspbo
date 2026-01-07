@@ -178,9 +178,9 @@
     @if(isset($r->is_pending) && $r->is_pending)
         <span class="badge bg-warning text-dark">PENDING</span>
     @else
-        <span class="badge {{ $r->status == 'Hadir' ? 'bg-success' : ($r->status == 'Alpa' ? 'bg-danger' : 'bg-info') }}">
-            {{ $r->status }}
-        </span>
+        <span class="badge {{ in_array($r->status, ['Hadir', 'Terlambat']) ? 'bg-success' : ($r->status == 'Alpa' ? 'bg-danger' : 'bg-info') }}">
+    {{ $r->status }}
+</span>
     @endif
 </td>
                                     <td class="small font-monospace">

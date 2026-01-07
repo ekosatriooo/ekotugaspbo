@@ -34,7 +34,7 @@ class UserController extends Controller
             'menu_name' => $request->menu
         ],
         [
-            'is_accessible' => $request->status == 'true' ? 1 : 0
+            'is_accessible' => ($request->status == 1 || $request->status == '1') ? 1 : 0
         ]
     );
 
@@ -61,9 +61,20 @@ class UserController extends Controller
         $countSiswa  = \App\Models\Siswa::count();
         $countUser   = \App\Models\User::count();
         $countKelas  = \App\Models\Kelas::count();
-
+        
         // Kirim data ke view petugas
         return view('petugas.dashboard', compact('countIzin', 'countSiswa', 'countUser', 'countKelas'));
+    }
+    
+    public function guruDashboard()
+    {
+        
+        $countIzin   = \App\Models\Izin::count();
+        $countSiswa  = \App\Models\Siswa::count();
+        $countUser   = \App\Models\User::count();
+        $countKelas  = \App\Models\Kelas::count();
+
+        return view('guru.dashboard', compact('countIzin', 'countSiswa', 'countKelas'));
     }
 
 }

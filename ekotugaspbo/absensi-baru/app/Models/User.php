@@ -50,7 +50,6 @@ class User extends Authenticatable
 
     public function hasPermission($menuName)
     {
-        // Cek apakah data ini benar-benar ada di database
         return \App\Models\Permission::where('role', $this->role)
             ->where('menu_name', $menuName)
             ->where('is_accessible', 1)
